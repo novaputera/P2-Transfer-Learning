@@ -1,4 +1,4 @@
-# 🤖 Proyek Klasifikasi Komponen Elektronika Berbasis Transfer Learning (RET503)
+# 🤖 P2 Transfer Learning (RET503)
 
 Repositori ini mendokumentasikan implementasi *Deep Learning* dan *Transfer Learning* untuk pengenalan citra objek modular robotik, khususnya dalam membedakan antara modul **Step-Down (Buck Converter)** dan **Servo Driver (PCA9685)**. Proyek ini dikembangkan untuk memenuhi tugas mata kuliah **RET503 Computer Vision and Deep Learning** di Program Studi Teknologi Rekayasa Robotika, Politeknik Negeri Batam.
 
