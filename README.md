@@ -1,112 +1,62 @@
-# 🚀 Laporan Proyek: Klasifikasi Komponen Robot Berbasis Transfer Learning (RET503)
+🤖 Proyek Klasifikasi Komponen Elektronika Berbasis Transfer Learning (RET503)
 
-**Mata Kuliah:** RET503 — Computer Vision and Deep Learning
+Repositori ini mendokumentasikan implementasi Deep Learning dan Transfer Learning untuk pengenalan citra objek modular robotik, khususnya dalam membedakan antara modul Step-Down (Buck Converter) dan Servo Driver (PCA9685). Proyek ini dikembangkan untuk memenuhi tugas mata kuliah RET503 Computer Vision and Deep Learning di Program Studi Teknologi Rekayasa Robotika, Politeknik Negeri Batam.
 
-**Institusi:** Politeknik Negeri Batam (Program Studi Teknologi Rekayasa Robotika)
+🚀 Gambaran Umum Proyek
 
-**Fokus Proyek:** Penerapan *Deep Learning* dan *Transfer Learning* untuk pengenalan visual komponen modular robotik (**MG90S Servo** vs **PCA9685 / Step-Down Module**).
+Sistem visi komputer pada robot modern menuntut tingkat ketepatan dan efisiensi yang tinggi. Alih-alih merancang dan melatih model jaringan saraf dari awal yang memerlukan waktu komputasi besar serta dataset berjumlah ribuan, pendekatan Transfer Learning memanfaatkan model pra-latih (pretrained backbone) yang telah teruji untuk mengenali fitur visual mendasar dengan sangat baik.
 
-## 🛠️ 1. Pengantar & Latar Belakang Proyek
+📂 Struktur Direktori Proyek
 
-Sistem persepsi yang handal menjadi salah satu pilar utama dalam otomatisasi robot modern. Repositori ini mendokumentasikan eksperimen pembuatan model pengenalan citra cerdas menggunakan pendekatan *Transfer Learning*. Alih-alih melatih model jaringan saraf tiruan dari nol (*from scratch*) yang membutuhkan sumber daya masif dan dataset raksasa, proyek ini memanfaatkan model dasar (*pretrained backbone*) yang telah terlatih pada ribuan kelas objek umum, lalu diadaptasi khusus untuk mengidentifikasi komponen elektronika secara presisi tinggi.
-
-## 🎯 2. Sasaran Utama (Objectives)
-
-Penyusunan eksperimen ini diarahkan untuk mencapai beberapa target berikut:
-
-* **Eksplorasi Adaptasi Model:** Memahami mekanisme pemanfaatan ulang bobot model siap pakai (*pretrained weights*) ke ranah spesifik robotika.
-
-* **Otomasi Pengayaan Data:** Mengatasi keterbatasan sampel visual awal melalui teknik *Data Augmentation* secara sistematis.
-
-* **Evaluasi Performa Menyeluruh:** Mengukur tingkat ketepatan prediksi (*accuracy*) serta menganalisis pola kesalahan menggunakan *Confusion Matrix*.
-
-* **Validasi Generalisasi:** Menguji ketahanan model di luar data latih untuk memastikan sistem siap diimplementasikan pada skenario nyata.
-
-## 🧠 3. Paradigma Transfer Learning & Arsitektur
-
-Proyek ini mengandalkan arsitektur **MobileNetV2** sebagai fondasi ekstraksi fitur. Jaringan dasar dibekukan (*frozen layers*) agar pengetahuan visual umumnya tetap terjaga, sementara lapisan atas (*classifier head*) disesuaikan untuk mengenali dua kategori objek output.
-
-```
-               [ Pretrained Weights (ImageNet) ]
-                              │
-                              ▼
-                 ┌─────────────────────────┐
-                 │    MobileNetV2 Layers   │ (Feature Extractor)
-                 └─────────────────────────┘
-                              │
-                              ▼
-                 ┌─────────────────────────┐
-                 │  Custom Dense & Softmax │ (Classification Head)
-                 └─────────────────────────┘
-                              │
-             ┌────────────────┴────────────────┐
-             ▼                                 ▼
-      [ Kelas MG90S ]                 [ Kelas PCA9685 ]
-
-```
-
-## 📂 4. Tata Letak Direktori Kerja
-
-Struktur direktori dirancang secara modular guna memudahkan pengelolaan dataset mentah, hasil augmentasi, hingga artefak keluaran evaluasi:
-
-```
 Transfer Learning/
-├── dataset_raw/                  # Kumpulan data hasil augmentasi otomatis
+├── dataset_raw/                  # Kumpulan citra hasil augmentasi otomatis per kelas
 │   ├── servo_driver/
 │   └── step_down/
-├── foto_asli/                    # Dokumentasi citra referensi utama
+├── foto_asli/                    # Citra referensi utama sumber augmentasi
 │   ├── servo_driver_1.jpg
 │   └── step_down_1.jpg
-├── results/                      # Artefak evaluasi otomatis
-│   ├── accuracy.png              # Grafik histori akurasi
-│   ├── loss.png                  # Grafik kurva loss
-│   ├── confusion_matrix.png      # Matriks evaluasi kelas
-│   └── final_model_comparison.csv# Rekap metrik latihan
-├── 1_augmentasi.py               # Skrip generator variasi citra
-├── 2_training.py                 # Skrip utama pelatihan & evaluasi model
-├── model_modul_elektronik.h5     # Bobot model akhir siap pakai
-└── README.md                     # Dokumentasi proyek
+├── results/                      # Artefak hasil pelatihan & evaluasi otomatis
+│   ├── accuracy.png              # Grafik kurva tingkat akurasi
+│   ├── loss.png                  # Grafik kurva fungsi kerugian (loss)
+│   ├── confusion_matrix.png      # Matriks kebingungan model (evaluasi kelas)
+│   └── final_model_comparison.csv# Rekapitulasi metrik numerik pelatihan
+├── 1_augmentasi.py               # Skrip generator variasi data citra sintetis
+├── 2_training.py                 # Skrip utama pelatihan model & evaluasi kinerja
+├── model_modul_elektronik.h5     # Berkas bobot arsitektur model siap pakai
+└── README.md                     # Berkas dokumentasi utama repositori
 
-```
 
-## ⚡ 5. Panduan Eksekusi Program di VS Code
+⚙️ Panduan Instalasi & Eksekusi
 
-Untuk mereproduksi eksperimen ini di lingkungan lokal Anda, ikuti tahapan ringkas berikut:
+Ikuti langkah-langkah berikut untuk menjalankan eksperimen ini di komputer Anda:
 
-1. **Instalasi Pustaka Pendukung:**
-   Buka terminal Visual Studio Code Anda dan jalankan perintah:
+Clone atau Buka Proyek di VS Code:
+Pastikan Anda membuka direktori utama proyek (C:\Transfer Learning) melalui Visual Studio Code.
 
-   ```
-   pip install tensorflow matplotlib pillow scipy scikit-learn seaborn pandas
-   
-   ```
+Instalasi Pustaka Pendukung:
+Buka terminal di VS Code dan jalankan perintah berikut untuk menginstal seluruh dependensi yang diperlukan:
 
-2. **Eksekusi Tahap Augmentasi Citra:**
-   Jalankan skrip pertama untuk memperbanyak variasi data secara sintetis:
+pip install tensorflow matplotlib pillow scipy scikit-learn seaborn pandas
 
-   ```
-   python 1_augmentasi.py
-   
-   ```
 
-3. **Inisiasi Pelatihan & Penyimpanan Hasil:**
-   Jalankan skrip utama untuk melatih model dan mengekspor grafik performa ke folder `results`:
+Jalankan Proses Augmentasi Citra:
+Eksekusi skrip pertama untuk memperbanyak sampel data secara otomatis dari foto referensi:
 
-   ```
-   python 2_training.py
-   
-   ```
+python 1_augmentasi.py
 
-## 📈 6. Analisis Hasil & Artefak Evaluasi (`results/`)
 
-Selama proses eksekusi skrip pelatihan, sistem secara otomatis menghasilkan laporan visual dan numerik di dalam folder `results`:
+Laksanakan Proses Pelatihan Model:
+Jalankan skrip kedua untuk mulai melatih model, mengevaluasi data, serta mengekspor grafik performa ke dalam folder results:
 
-* **`accuracy.png` & `loss.png`**: Menunjukkan tren peningkatan kualitas belajar model seiring bertambahnya iterasi (*epoch*), memastikan tidak terjadi gejala *overfitting* yang ekstrem.
+python 2_training.py
 
-* **`confusion_matrix.png`**: Memberikan gambaran intuitif mengenai sejauh mana model mampu membedakan kedua komponen tanpa adanya kesalahan silang (*misclassification*).
 
-* **`final_model_comparison.csv`**: Menyimpan rekapitulasi data metrik numerik untuk keperluan penyusunan laporan tertulis.
+📊 Artefak Evaluasi & Hasil (results/)
 
-## 🏁 7. Kesimpulan
+Setiap kali proses pelatihan selesai, sistem secara otomatis merangkum hasil evaluasi ke dalam direktori results:
 
-Penerapan *Transfer Learning* terbukti menjadi solusi paling efektif dan efisien untuk menyelesaikan permasalahan visi komputer pada proyek robotika skala menengah. Dengan dukungan kerangka kerja yang fleksibel serta pemanfaatan model terekstraksi fitur yang matang, sistem mampu mengenali komponen target dengan tingkat keandalan yang tinggi meskipun hanya berbekal sedikit data referensi awal.
+Grafik Akurasi & Loss (accuracy.png, loss.png): Membantu memantau kestabilan proses belajar model pada setiap iterasi (epoch).
+
+Confusion Matrix (confusion_matrix.png): Memvisualisasikan tingkat keberhasilan model dalam memisahkan kedua kategori modul tanpa ada kesalahan silang.
+
+Laporan Metrik (final_model_comparison.csv): Rekap data numerik untuk keperluan analisis lanjutan pada laporan praktikum.
